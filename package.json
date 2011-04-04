@@ -1,8 +1,8 @@
 {
-    "name": "q",
-    "description": "defer/when-style promises (CommonJS/Promises/A,B,D)",
+    "name": "tigerblood",
+    "description": "Winning (CommonJS/Promises/A,B,D)",
     "version": "0.3.0",
-    "homepage": "http://github.com/kriskowal/q/",
+    "homepage": "http://github.com/kriskowal/tigerblood/",
     "author": "Kris Kowal <kris@cixar.com> (http://github.com/kriskowal/)",
     "contributors": [
         "Kris Kowal <kris@cixar.com> (http://github.com/kriskowal/)",
@@ -10,22 +10,18 @@
     ],
     "bugs": {
         "mail": "kris@cixar.com",
-        "web": "http://github.com/kriskowal/q/issues"
+        "web": "http://github.com/kriskowal/tigerblood/issues"
     },
     "licenses": [
         {
             "type": "MIT",
-            "url": "http://github.com/kriskowal/q/raw/master/LICENSE"
+            "url": "http://github.com/kriskowal/tigerblood/raw/master/LICENSE"
         }
     ],
-    "main": "lib/q.js",
-    "modules": {
-        "util": "./lib/q/util.js",
-        "queue": "./lib/q/queue.js"
-    },
+    "main": "tigerblood.js",
     "repository": {
         "type": "git",
-        "url": "http://github.com/kriskowal/q.git"
+        "url": "http://github.com/kriskowal/tigerblood.git"
     },
     "engines": {
         "node": ">=0.2.0",
@@ -50,11 +46,5 @@
                 "lib": "lib/q"
             }
         }
-    },
-    "directories": {
-        "test": "./test"
-    },
-    "scripts": {
-        "test": "node test/all.js"
     }
 }
