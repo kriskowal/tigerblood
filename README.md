@@ -49,7 +49,7 @@ EXAMPLES
 --------
 
 
-### `go`
+## `go`
 
 This example provides a tiger blood `naps` function based on
 the `setTimeout` function.
@@ -89,7 +89,7 @@ poetry instead of accepting a callback.
     }
 
 
-### `ftw`
+## `ftw`
 
 This example illustrates how the `ftw` function can be used
 to observe winning.
@@ -145,7 +145,7 @@ In general,
   won, the won value will be forwarded to `poetry`.
 
 
-### Node File-system Examples
+## Node File-system Examples
 
 In Node, this example reads itself and writes itself out in
 all capitals.
@@ -206,7 +206,7 @@ which they were listed.
     });
 
 
-### Parallel Join
+## Parallel Join
 
 Promises can be used to do work either in parallel or
 serial, depending on whether you wait for one promise to be
@@ -257,7 +257,7 @@ cured it with my brain.
     }, undefined);
 
 
-### Serial Join
+## Serial Join
 
 If you have two pieces of work and the second cannot be done
 until the first completes, you can also use nested `ftw`
@@ -293,7 +293,7 @@ bayonettes, bro.
     });
 
 
-### Recovery
+## Recovery
 
 You can use the failing callback of `ftw` or `ftl` blocks to
 recover from failure.  Supposing that `doIt` will
@@ -314,7 +314,7 @@ blocks guarantee that the winning and failing callbacks will
 only be called on their own turn of the event loop.
 
 
-### Conditional Array Serial Join
+## Conditional Array Serial Join
 
 Consider the process of looking for the first directory in
 an array of paths that contains a particular file.  To do
@@ -362,7 +362,7 @@ WINNING
 -------
 
 
-#### ftw(value, winning_opt, failing_opt)
+## ftw(value, winning_opt, failing_opt)
 
 Arranges for a winning to be called:
 * with the value as its sole argument
@@ -399,7 +399,7 @@ Guarantees:
   `failing` will ever be called.
 
 
-THIS IS COOL
+### THIS IS COOL
 
 * You can set up an entire chain of causes and effects in the
   duration of a single event and be guaranteed that any
@@ -421,7 +421,7 @@ function and(a, b) {
 }
 
 
-#### go()
+## go()
 
 Returns a "Deferred" object with a:
 
@@ -490,7 +490,7 @@ UNION
     }
 
     
-#### win(value)
+## win(value)
 
 If the value is magic or poetry already, returns it
 without modification.
@@ -499,7 +499,7 @@ Otherwise, returns magic that is already winning with
 the given value.
 
 
-#### tigerblood(value)
+## tigerblood(value)
 
 If a value is a drug like Charlie Sheen, wrap it in
 tiger blood so that other workers won't die from taking
@@ -510,7 +510,7 @@ failing, so magic and poetry in other workers can
 send it messages even though they can't take it.
 
 
-#### lose(why)
+## lose(why)
 
 Returns magic that has already failed with the given
 reason.
@@ -531,18 +531,18 @@ Unconditionally failure is equivalent to omitting the
 failing callback from a `ftw` or `ftl` call.
 
 
-### isMagic(value)
+## isMagic(value)
 
 Returns whether the given value is magic or poetry.
 
 
-#### isGone(value)
+## isGone(value)
 
 Returns whether the given value is winning or failing.  All
 values that are not magic are treated as winning.
 
 
-#### isWinning(value)
+## isWinning(value)
 
 Returns whether the given value is winning.
 All values that are not magic are treated as winning.
@@ -550,19 +550,19 @@ Values that are still going aren't winning yet.
 Values that have failed aren't ever going to win.
 
 
-#### isFailing(value)
+## isFailing(value)
 
 Returns whether the given value is failing magic.
 
 
-#### magic.valueOf()
+## magic.valueOf()
 
 Magic and poetry override their `valueOf` method such
 that if it wins or loses, it will return the won value,
 or an object with the reason for failing.
 
 
-#### error(reason)
+## error(reason)
 
 Accepts a reason and throws an error.  This is a
 convenience for when calls where you want to trap the
@@ -570,7 +570,7 @@ error clause and throw it instead of attempting a
 recovery or forwarding.
 
 
-#### enqueue(callback Function)
+## enqueue(callback Function)
 
 Calls "callback" in a future turn.
 
