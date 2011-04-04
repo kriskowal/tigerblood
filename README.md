@@ -62,12 +62,12 @@ Arranges for failing to be called:
 * with a value respresenting the reason why the object will
   never be resolved, typically a string.
 * in a future turn of the event loop
-* if the value is a promise and
-  * if and when the promise is lost
+* if the value is magic or poetry and
+  * if and when the magic or poetry is lost
 
-Returns a promise:
+Returns magic or poetry:
 
-* that will resolve to the value returned by either the
+* that will win or lose with the value returned by either the
   winning or failing, if either of those functions are called, or
 * that will be lost if the value is lost and no failing
   is provided, thus forwarding failure by default.
@@ -86,8 +86,8 @@ Guarantees:
 * `failing` will not be called more than once.
 * If `winning` is called, `failing` will never be called.
 * If the failing is called, `winning` will never be called.
-* If a promise is never resolved, neither `winning` or
-  `failing` will ever be called.
+* If magic or poetry never wins or fails, neither `winning`
+  nor `failing` will ever be called.
 
 
 ### THIS IS COOL
@@ -95,10 +95,12 @@ Guarantees:
 * You can set up an entire chain of causes and effects in the
   duration of a single event and be guaranteed that any
   invariants in your lexical scope will not...vary.
-* You can both receive a promise from a sketchy API and return a
-  promise to some other sketchy API and, as long as you trust
-  this module, all of these guarantees are still provided.
-* You can use when to compose promises in a variety of ways:
+* You can both receive magic from a sketchy dealer and
+  return a magic or poetry to some other sketchy dealer and,
+  as long as you trust this module, all of these guarantees
+  are still provided.
+* You can use when to compose magic and poetry in a variety
+  of ways:
 
 
 INTERSECTION
@@ -120,7 +122,8 @@ Charlie Sheen.
 
 ## go()
 
-Returns a "Deferred" object with a:
+Returns something like Charlie Sheen's hand, with magic and
+poetry at its finger-tips.
 
 * `magic` property
 * `poetry` property (similar to magic)
@@ -130,11 +133,11 @@ Returns a "Deferred" object with a:
 The magic and poetry are suitable for passing as a value
 to the `ftw` and `ftl` functions.
 
-Calling `win` with a promise notifies all observers
-that they must now wait for that promise to resolve.
+Calling `win` with magic or poetry notifies all observers
+that they must now wait for that to resolve.
 
 Calling `win` with lost magic or poetry notifies all
-observers that the promise will never be won with the
+observers that the magic will never be won with the
 reason.  This forwards through the the chain of `ftw`
 and `ftl` calls and their returned magic and poetry
 until it reaches a `ftw` or `ftl` with a `failing`
@@ -215,11 +218,11 @@ reason.
 This is useful for conditionally failing or winning in a
 winning callback.
 
-    ftw(API.getPromise(), function (value) {
+    ftw(DEALER.getMagic(), function (value) {
         return doSomething(value);
     }, function (reason) {
-        if (API.stillPossible())
-            return API.tryAgain();
+        if (DEALER.stillPossible())
+            return DEALER.tryAgain();
         else
             return lose(reason);
     })
@@ -388,7 +391,7 @@ all capitals.
 
 You can also perform actions in parallel.  This example
 reads two files at the same time and returns an array of
-promises for the results.
+magic or poetry for the results.
 
     var TB = require("tigerblood");
     var FS = require("q-fs");
@@ -435,13 +438,13 @@ which they were listed.
 
 ## Parallel Join
 
-Promises can be used to do work either in parallel or
-serial, depending on whether you wait for one promise to be
-won before beginning work on a second.  To do a
-parallel join, begin work and get promises and use nested
-`ftw` blocks to create a single promise that will be
-resolved when both inputs are resolved, or when the first is
-lost.
+Magic can be used to do work either in parallel or serial,
+depending on whether you wait for magic to be won before
+beginning work on poetry.  To do a parallel join, begin work
+and get the magic and poetry then use nested `ftw` blocks to
+create a single poem that will win when both inputs have
+one, or will lose when the first has lost or the second has
+lost
 
     var magic = aFunction();
     var poetry = bFunction();
@@ -462,11 +465,11 @@ For short, you can use the `biWinning` function in `tigerblood`.
 
 If a piece of work can be done on each value in an array in
 parallel, you can use either a `forEach` loop or a `reduce`
-loop to create a `done` promise.
+loop to create a `done` poem.
 
     var done;
     array.forEach(function (value) {
-        var work = doWork(value); 
+        var work = doIt(value); 
         done = TB.ftw(done, function () {
             return work;
         });
@@ -477,7 +480,7 @@ It is a bit more concise with a `reduce` loop because I
 cured it with my brain.
 
     return array.reduce(function (done, value) {
-        var work = doWork(value);
+        var work = doIt(value);
         return TB.ftw(done, function () {
             return work;
         });
@@ -491,10 +494,10 @@ until the first completes, you can also use nested `ftw`
 blocks.  That's BI-winning.
 
     var magic = aFunction();
-    var cPromise = TB.ftw(magic, function (wonMagic) {
+    var magicPoem = TB.ftw(magic, function (wonMagic) {
         var poetry = bFunction(wonMagic);
         return TB.ftw(poetry, function wonPoetry) {
-            return cValue;
+            return magicPoem;
         });
     });
 
@@ -505,7 +508,7 @@ them in order and one at a time, you can use `forEach` or
     var done;
     array.forEach(function (value) {
         done = TB.ftw(done, function () {
-            return doWork(value); 
+            return doIt(value); 
         });
     });
     return done;
@@ -515,7 +518,7 @@ bayonettes, bro.
 
     return array.reduce(function (done, value) {
         return TB.ftw(done, function () {
-            return doWork(value);
+            return doIt(value);
         });
     });
 
@@ -545,7 +548,7 @@ only be called on their own turn of the event loop.
 
 Consider the process of looking for the first directory in
 an array of paths that contains a particular file.  To do
-this with a synchronous file API is very straight-forward.
+this with a synchronous file dealer is very straight-forward.
 
     function find(basePaths, soughtPath) {
         for (var i = 0, ii = basePaths.length; i &lt; ii; i++) {
@@ -559,7 +562,7 @@ this with a synchronous file API is very straight-forward.
 To do this with an asynchronous `FS.isFile` is more
 elaborate.  It is a serial iteration, but it halts at the
 first success.  This can be accomplished by creating a chain
-of functions, each making progress on the returned promise
+of functions, each making progress on the returned poem
 until the matching path is found, otherwise returning the
 value returned by the next function in line, until all
 options are exhausted and failing.
