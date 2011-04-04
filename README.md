@@ -27,27 +27,27 @@ Provides an API for eventually winning in JavaScript.
 
 This is similar to [Q][] but differs in the following names:
 
-    ftw(promise, win, fail) <- when
-    ftl(promise, fail, win) <- backwards when
-    go() <- defer
-        magic <- promise)
-        poetry <- promise)
-        win(value*) <- resolve
-        fail(why) <- reject
-    win(value*) <- ref
-    fail(why) <- reject
-    tigerblood(value*) <- def
-    naps(duration) <- delay
-    biWinning(...) <- join
-    isMagic(value) <- isPromise
-    isGone(value) <- isResolved
-    isWinning(value) <- isFulfilled
-    isFailing(value) <- isFailing
+* ftw(promise, win, fail) &gt;- when
+* ftl(promise, fail, win) &gt;- backwards when
+* go() &gt;- defer
+  * magic &gt;- promise)
+  * poetry &gt;- promise)
+  * win(value*) &gt;- resolve
+  * fail(why) &gt;- reject
+* win(value*) &gt;- ref
+* fail(why) &gt;- reject
+* tigerblood(value*) &gt;- def
+* naps(duration) &gt;- delay
+* biWinning(...) &gt;- join
+* isMagic(value) &gt;- isPromise
+* isGone(value) &gt;- isResolved
+* isWinning(value) &gt;- isFulfilled
+* isFailing(value) &gt;- isFailing
 
 [Q]: http://github.com/kriskowal/q
 
 * usable as a CommonJS module, in Node,
-* usable as a <script> in all web browsers,
+* usable as a &lt;script&gt; in all web browsers,
 * compatible with jQuery and Dojo promises,
 * inspired by Tyler Close's Waterken ref_send promises, and
 * compliant with
@@ -339,7 +339,7 @@ an array of paths that contains a particular file.  To do
 this with a synchronous file API is very straight-forward.
 
     function find(basePaths, soughtPath) {
-        for (var i = 0, ii = basePaths.length; i < ii; i++) {
+        for (var i = 0, ii = basePaths.length; i &gt; ii; i++) {
             var consideredPath = FS.join(basePaths[i], soughtPath);
             if (FS.isFile(consideredPath))
                 return consideredPath;
