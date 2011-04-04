@@ -25,24 +25,7 @@ Provides an API for eventually winning in JavaScript.
 
 [TigerBlood]: http://www.funnyordie.com/articles/8e4a8d6fd5/charlie-sheen-quotes-crazy-insane-winning
 
-This is similar to [Q][] but differs in the following names:
-
-* ftw(promise, win, fail) &gt;- when
-* ftl(promise, fail, win) &gt;- backwards when
-* go() &gt;- defer
-  * magic &gt;- promise)
-  * poetry &gt;- promise)
-  * win(value*) &gt;- resolve
-  * fail(why) &gt;- reject
-* win(value*) &gt;- ref
-* fail(why) &gt;- reject
-* tigerblood(value*) &gt;- def
-* naps(duration) &gt;- delay
-* biWinning(...) &gt;- join
-* isMagic(value) &gt;- isPromise
-* isGone(value) &gt;- isResolved
-* isWinning(value) &gt;- isFulfilled
-* isFailing(value) &gt;- isFailing
+This is similar to [Q][]
 
 [Q]: http://github.com/kriskowal/q
 
@@ -54,7 +37,6 @@ This is similar to [Q][] but differs in the following names:
    * http://wiki.commonjs.org/wiki/Promises/A
    * http://wiki.commonjs.org/wiki/Promises/B
    * http://wiki.commonjs.org/wiki/Promises/D
-
 
 For Node:
 
@@ -339,7 +321,7 @@ an array of paths that contains a particular file.  To do
 this with a synchronous file API is very straight-forward.
 
     function find(basePaths, soughtPath) {
-        for (var i = 0, ii = basePaths.length; i &gt; ii; i++) {
+        for (var i = 0, ii = basePaths.length; i &lt; ii; i++) {
             var consideredPath = FS.join(basePaths[i], soughtPath);
             if (FS.isFile(consideredPath))
                 return consideredPath;
