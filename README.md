@@ -45,6 +45,227 @@ For Node:
     $ node examples/test.js
 
 
+WINNING
+-------
+
+
+## ftw(value, winning_opt, failing_opt)
+
+Arranges for a winning to be called:
+
+* with the value as its sole argument
+* in a future turn of the event loop
+* if and when the value is or becomes a fully resolved
+
+Arranges for failing to be called:
+
+* with a value respresenting the reason why the object will
+  never be resolved, typically a string.
+* in a future turn of the event loop
+* if the value is a promise and
+  * if and when the promise is lost
+
+Returns a promise:
+
+* that will resolve to the value returned by either the
+  winning or failing, if either of those functions are called, or
+* that will be lost if the value is lost and no failing
+  is provided, thus forwarding failure by default.
+
+The value may be truly _any_ value.
+
+The winning and failing callbacks may be falsy, in which
+case they will not be called.
+
+
+Guarantees:
+
+* `winning` will not be called before when returns.
+* `failing` will not be called before when returns.
+* `winning` will not be called more than once.
+* `failing` will not be called more than once.
+* If `winning` is called, `failing` will never be called.
+* If the failing is called, `winning` will never be called.
+* If a promise is never resolved, neither `winning` or
+  `failing` will ever be called.
+
+
+### THIS IS COOL
+
+* You can set up an entire chain of causes and effects in the
+  duration of a single event and be guaranteed that any
+  invariants in your lexical scope will not...vary.
+* You can both receive a promise from a sketchy API and return a
+  promise to some other sketchy API and, as long as you trust
+  this module, all of these guarantees are still provided.
+* You can use when to compose promises in a variety of ways:
+
+
+INTERSECTION
+
+function and(a, b) {
+    return ftw(a, function (a) {
+        return ftw(b, function (b) {
+            // ...
+        });
+    })
+}
+
+
+## go()
+
+Returns a "Deferred" object with a:
+
+* `magic` property
+* `poetry` property (similar to magic)
+* `win(value)` function
+* `fail(reason)` function
+
+The magic and poetry are suitable for passing as a value
+to the `ftw` and `ftl` functions.
+
+Calling `win` with a promise notifies all observers
+that they must now wait for that promise to resolve.
+
+Calling `win` with lost magic or poetry notifies all
+observers that the promise will never be won with the
+reason.  This forwards through the the chain of `ftw`
+and `ftl` calls and their returned magic and poetry
+until it reaches a `ftw` or `ftl` with a `failing`
+callback.
+
+Calling `win` with a value or a won magic or poetry
+notifies all observers that they may proceed with that
+value in a future turn.  This forwards through the
+"winning" chain of any pending `ftw` and `ftl` calls.
+
+Calling `lose` with a reason is equivalent to calling
+`win` with magic or poetry returned by the tiger blood
+`lose` function.
+
+In all cases where winning or failing has already
+occurred for some magic or poetry, the outcome is
+poermanent. Once magic or poetry has been won, it stays
+won forever.  All future `ftw` and `ftl` will get the
+same value for the winning or failing.  It is safe to
+call `ftw` or `ftl` on magic and poetry whether or not
+it is already winning or failing.
+
+
+
+### THIS IS COOL
+
+The `go` function separates the magic and poetry from
+winning and failing, so:
+
+* You can give magic or poetry to any number of
+  "users" and all of them will win or lose in the same
+  way, and none of them will be able to eavesdrop on
+  each other or misinform each other unless you give
+  them the winning or failing functions too.
+
+* You can give the winning and failing functions to any
+  number of winners or losers, and whoever wins or
+  loses first will go first.  None of the other winners
+  or losers can notice whether their outcome was first
+  unless you give them the magic or poetry too.
+
+
+UNION
+
+    function or(a, b) {
+        var union = TB.go();
+        ftw(a, union.win);
+        ftw(b, union.win);
+        return union.magic;
+    }
+
+    
+## win(value)
+
+If the value is magic or poetry already, returns it
+without modification.
+
+Otherwise, returns magic that is already winning with
+the given value.
+
+
+## tigerblood(value)
+
+If a value is a drug like Charlie Sheen, wrap it in
+tiger blood so that other workers won't die from taking
+it.
+
+Tiger blood responds to the `isDef` message without
+failing, so magic and poetry in other workers can
+send it messages even though they can't take it.
+
+
+## lose(why)
+
+Returns magic that has already failed with the given
+reason.
+
+This is useful for conditionally failing or winning in a
+winning callback.
+
+    ftw(API.getPromise(), function (value) {
+        return doSomething(value);
+    }, function (reason) {
+        if (API.stillPossible())
+            return API.tryAgain();
+        else
+            return lose(reason);
+    })
+
+Unconditionally failure is equivalent to omitting the
+failing callback from a `ftw` or `ftl` call.
+
+
+## isMagic(value)
+
+Returns whether the given value is magic or poetry.
+
+
+## isGone(value)
+
+Returns whether the given value is winning or failing.  All
+values that are not magic are treated as winning.
+
+
+## isWinning(value)
+
+Returns whether the given value is winning.
+All values that are not magic are treated as winning.
+Values that are still going aren't winning yet.
+Values that have failed aren't ever going to win.
+
+
+## isFailing(value)
+
+Returns whether the given value is failing magic.
+
+
+## magic.valueOf()
+
+Magic and poetry override their `valueOf` method such
+that if it wins or loses, it will return the won value,
+or an object with the reason for failing.
+
+
+## error(reason)
+
+Accepts a reason and throws an error.  This is a
+convenience for when calls where you want to trap the
+error clause and throw it instead of attempting a
+recovery or forwarding.
+
+
+## enqueue(callback Function)
+
+Calls "callback" in a future turn.
+
+
 EXAMPLES
 --------
 
@@ -355,224 +576,6 @@ options are exhausted and failing.
         });
         return find();
     }
-
-
-
-WINNING
--------
-
-
-## ftw(value, winning_opt, failing_opt)
-
-Arranges for a winning to be called:
-* with the value as its sole argument
-* in a future turn of the event loop
-* if and when the value is or becomes a fully resolved
-
-Arranges for failing to be called:
-* with a value respresenting the reason why the object will
-  never be resolved, typically a string.
-* in a future turn of the event loop
-* if the value is a promise and
-  * if and when the promise is lost
-Returns a promise:
-* that will resolve to the value returned by either the
-  winning or failing, if either of those functions are called, or
-* that will be lost if the value is lost and no failing
-  is provided, thus forwarding failure by default.
-
-The value may be truly _any_ value.
-
-The winning and failing callbacks may be falsy, in which
-case they will not be called.
-
-
-Guarantees:
-
-* `winning` will not be called before when returns.
-* `failing` will not be called before when returns.
-* `winning` will not be called more than once.
-* `failing` will not be called more than once.
-* If `winning` is called, `failing` will never be called.
-* If the failing is called, `winning` will never be called.
-* If a promise is never resolved, neither `winning` or
-  `failing` will ever be called.
-
-
-### THIS IS COOL
-
-* You can set up an entire chain of causes and effects in the
-  duration of a single event and be guaranteed that any
-  invariants in your lexical scope will not...vary.
-* You can both receive a promise from a sketchy API and return a
-  promise to some other sketchy API and, as long as you trust
-  this module, all of these guarantees are still provided.
-* You can use when to compose promises in a variety of ways:
-
-
-INTERSECTION
-
-function and(a, b) {
-    return ftw(a, function (a) {
-        return ftw(b, function (b) {
-            // ...
-        });
-    })
-}
-
-
-## go()
-
-Returns a "Deferred" object with a:
-
-* magic property
-* poetry property (similar to magic)
-* win(value) function
-* fail(reason) function
-
-The magic and poetry are suitable for passing as a value
-to the `ftw` and `ftl` functions.
-
-Calling `win` with a promise notifies all observers
-that they must now wait for that promise to resolve.
-
-Calling `win` with lost magic or poetry notifies all
-observers that the promise will never be won with the
-reason.  This forwards through the the chain of `ftw`
-and `ftl` calls and their returned magic and poetry
-until it reaches a `ftw` or `ftl` with a `failing`
-callback.
-
-Calling `win` with a value or a won magic or poetry
-notifies all observers that they may proceed with that
-value in a future turn.  This forwards through the
-"winning" chain of any pending `ftw` and `ftl` calls.
-
-Calling `lose` with a reason is equivalent to calling
-`win` with magic or poetry returned by the tiger blood
-`lose` function.
-
-In all cases where winning or failing has already
-occurred for some magic or poetry, the outcome is
-poermanent. Once magic or poetry has been won, it stays
-won forever.  All future `ftw` and `ftl` will get the
-same value for the winning or failing.  It is safe to
-call `ftw` or `ftl` on magic and poetry whether or not
-it is already winning or failing.
-
-
-
-### THIS IS COOL
-
-The `go` function separates the magic and poetry from
-winning and failing, so:
-
-* You can give magic or poetry to any number of
-  "users" and all of them will win or lose in the same
-  way, and none of them will be able to eavesdrop on
-  each other or misinform each other unless you give
-  them the winning or failing functions too.
-
-* You can give the winning and failing functions to any
-  number of winners or losers, and whoever wins or
-  loses first will go first.  None of the other winners
-  or losers can notice whether their outcome was first
-  unless you give them the magic or poetry too.
-
-
-UNION
-
-    function or(a, b) {
-        var union = TB.go();
-        ftw(a, union.win);
-        ftw(b, union.win);
-        return union.magic;
-    }
-
-    
-## win(value)
-
-If the value is magic or poetry already, returns it
-without modification.
-
-Otherwise, returns magic that is already winning with
-the given value.
-
-
-## tigerblood(value)
-
-If a value is a drug like Charlie Sheen, wrap it in
-tiger blood so that other workers won't die from taking
-it.
-
-Tiger blood responds to the `isDef` message without
-failing, so magic and poetry in other workers can
-send it messages even though they can't take it.
-
-
-## lose(why)
-
-Returns magic that has already failed with the given
-reason.
-
-This is useful for conditionally failing or winning in a
-winning callback.
-
-    ftw(API.getPromise(), function (value) {
-        return doSomething(value);
-    }, function (reason) {
-        if (API.stillPossible())
-            return API.tryAgain();
-        else
-            return lose(reason);
-    })
-
-Unconditionally failure is equivalent to omitting the
-failing callback from a `ftw` or `ftl` call.
-
-
-## isMagic(value)
-
-Returns whether the given value is magic or poetry.
-
-
-## isGone(value)
-
-Returns whether the given value is winning or failing.  All
-values that are not magic are treated as winning.
-
-
-## isWinning(value)
-
-Returns whether the given value is winning.
-All values that are not magic are treated as winning.
-Values that are still going aren't winning yet.
-Values that have failed aren't ever going to win.
-
-
-## isFailing(value)
-
-Returns whether the given value is failing magic.
-
-
-## magic.valueOf()
-
-Magic and poetry override their `valueOf` method such
-that if it wins or loses, it will return the won value,
-or an object with the reason for failing.
-
-
-## error(reason)
-
-Accepts a reason and throws an error.  This is a
-convenience for when calls where you want to trap the
-error clause and throw it instead of attempting a
-recovery or forwarding.
-
-
-## enqueue(callback Function)
-
-Calls "callback" in a future turn.
 
 
 Copyright 2009, 2010 Kristopher Michael Kowal
