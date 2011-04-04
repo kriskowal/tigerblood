@@ -51,7 +51,7 @@ WINNING
 
 ## ftw(value, winning_opt, failing_opt)
 
-Arranges for a winning to be called:
+Arranges for winning to be called:
 
 * with the value as its sole argument
 * in a future turn of the event loop
@@ -112,6 +112,12 @@ function and(a, b) {
 }
 
 
+## ftl(value, losing, winning)
+
+Same as `ftw` but more convenient for values other than
+Charlie Sheen.
+
+
 ## go()
 
 Returns a "Deferred" object with a:
@@ -145,7 +151,7 @@ Calling `lose` with a reason is equivalent to calling
 
 In all cases where winning or failing has already
 occurred for some magic or poetry, the outcome is
-poermanent. Once magic or poetry has been won, it stays
+permanent. Once magic or poetry has been won, it stays
 won forever.  All future `ftw` and `ftl` will get the
 same value for the winning or failing.  It is safe to
 call `ftw` or `ftl` on magic and poetry whether or not
