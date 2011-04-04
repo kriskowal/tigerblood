@@ -49,7 +49,7 @@ EXAMPLES
 --------
 
 
-## `go`
+## GO
 
 This example provides a tiger blood `naps` function based on
 the `setTimeout` function.
@@ -89,7 +89,7 @@ poetry instead of accepting a callback.
     }
 
 
-## `ftw`
+## FTW
 
 This example illustrates how the `ftw` function can be used
 to observe winning.
